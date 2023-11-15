@@ -12,10 +12,11 @@ const theme = {
   headerFontColor: '#fff',
   headerFontSize: '15px',
   
-  botBubbleColor: '#EF6C00',
-  botFontColor: '#fff',
+  botBubbleColor: '#FFF0E4',
+  // botFontColor: '#fff',
   userBubbleColor: '#fff',
-  userFontColor: '#4a4a4a',
+  // userFontColor: '#4a4a4a',
+  // userFontColor: '#4a4a4a',
   options:'#ccc',
 };
 
@@ -163,7 +164,7 @@ const steps=[
         <div>
             <ChatBot 
               steps={steps} 
-              headerTitle="LUCAS" 
+              headerTitle="Lucas" 
               botAvatar="../lucas_logo.png"
               // userAvatar="../lucas_logo.png"
             />

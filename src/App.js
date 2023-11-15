@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <div className="bot_cadre">
-      <h2>LUCAS Bot</h2>
+      {/* <center><h2>LUCAS L3</h2></center>  */}
         <Thebot/>
       </div>
     </>
