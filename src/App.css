@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.bot_cadre {
+    /* background-color: brown; */
+    height: 200px;
+    margin-right: 175px;
+    margin-left: 175px;
+    height:650px;
+    right: 60%;
+    /* left: 50%; */
+    bottom: 27px;
+    /* position: fixed; */
+}
