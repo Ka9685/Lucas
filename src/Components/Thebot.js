@@ -3,6 +3,7 @@ import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
 
 import {Segment} from "semantic-ui-react";
+import { useState } from 'react';
  
 const theme = {
   background: '#f5f8fb',
@@ -10,142 +11,111 @@ const theme = {
   headerBgColor: '#EF6C00',
   headerFontColor: '#fff',
   headerFontSize: '15px',
-  botBubbleColor: '#EF6C00',
-  botFontColor: '#fff',
+  
+  botBubbleColor: '#FFF0E4',
+  // botFontColor: '#fff',
   userBubbleColor: '#fff',
-  userFontColor: '#4a4a4a',
+  // userFontColor: '#4a4a4a',
+  // userFontColor: '#4a4a4a',
+  options:'#ccc',
 };
 
 
 const Thebot = () => {
 
 
-
+  const [userMessage, setUserMessage] = useState('');
   
+  const handleUserMessage = (value) => {
+    setUserMessage(value.toLowerCase());
+  };
 
-  const steps=[
-      // {
-      //   id:'intro', 
-      //   message:'Hello. What is your name?', 
-      //   trigger:'intro-user',
-      // },
-      // {
-      //   id:'intro-user', 
-      //   user:true, 
-      //   end:true,
-      // }
+  const handleChatbotResponse = () => {
+    let response = '';
+    const greetings = ['bonjour', 'salut', 'hello'];
+    const courseKeywords = ['cours', 'formation', 'matière'];
+    const admissionKeywords = ['admission', 'inscription', 'candidature'];
+    const contactKeywords = ['contact', 'adresse', 'téléphone'];
 
+    if (greetings.some((greeting) => userMessage.includes(greeting))) {
+      response = 'Bonjour ! Comment puis-je vous aider ?';
+    } else if (courseKeywords.some((keyword) => userMessage.includes(keyword))) {
+      response = 'Nous proposons une variété de cours dans différentes disciplines. Pouvez-vous préciser votre demande ?';
+    } else if (admissionKeywords.some((keyword) => userMessage.includes(keyword))) {
+      response = 'Pour toute information sur les admissions, veuillez visiter notre page d\'admission ou contacter notre bureau des admissions.';
+    } else if (contactKeywords.some((keyword) => userMessage.includes(keyword))) {
+      response = 'Vous pouvez nous contacter par email à contact@universite.com ou par téléphone au 123-456-7890.';
+    } else {
+      response = 'Je suis désolé, je ne comprends pas. Veuillez poser une autre question ou choisir parmi les options disponibles.';
+    }
 
+    return response;
+  };
 
-      
-
-
-
-      {
-        id: '1',
-        message: 'Welcome to react chatbot!',
-        trigger: '2',
+  const steps = [
+    {
+      id: 'welcome',
+      message: 'Bonjour ! Comment puis-je vous aider ?',
+      trigger: 'userQuery',
+    },
+    {
+      id: 'userQuery',
+      user: true,
+      trigger: 'response',
+      validator: (value) => {
+        handleUserMessage(value);
+        return true;
       },
-      {
-        id: '2',
-        message: 'Let\'s calculate your BMI (Body Mass Index)',
-        trigger: '3',
-      },
-      {
-        id: '3',
-        message: 'Please type your height (cm)',
-        trigger: 'height',
-      },
-      {
-        id: 'height',
-        user: true,
-        // trigger: '4',
-        // validator,
-        end:true
-      }
 
-
-
-
-
-
-
-
-      // {
-      //   id:"Greet", 
-      //   message:"Bienvenue ! Je suis KamBot, à votre service", 
-      //   trigger:"ask username"
-      // },
-      // {
-      //   id:"ask username", 
-      //   message:"Veuillez entrer votre nom SVP !", 
-      //   trigger:"attente1"
-      // },
-      // {
-      //   id:"attente1", 
-      //   user:true, 
-      //   trigger:"username"
-      // },
-      // {
-      //   id:"username", 
-      //   message:"Salut {previousValue}, Vous êtes ici pour un achat. Quel produit ?", 
-      //   trigger:"issues"
-      // },
-      // {
-      //   id:"issues", 
-      //   options:
-      //   [
-      //     {value:"Telephone", label:"Telephone", trigger:"Telephone"},
-      //     {value:"Ordinateur", label:"Ordinateur", trigger:"Ordinateur"},
-      //     {value:"SmartTV", label:"SmartTV", trigger:"SmartTV"},
-      //   ]
-      // },
-      // {
-      //   id:"Telephone", 
-      //   message:"Ok ! Concernant les téléphone, nous disposons de 5 marques de qualité.", 
-      //   trigger:"suite"
-      // },
-      // {
-      //   id:"Ordinateur", 
-      //   message:"Nous sommes un distributeur aggréé de la marque HP. Mais vous pourrez trouver aussi des PC DELL, Lenovo, ainsi que des MAC.", 
-      // },
-      // {
-      //   id:"SmartTV", 
-      //   message:"Ok ! Faites votre choix parmi la plétore de TV smart de qualité", 
-      //   trigger:"suite"
-      // },
-      // {
-      //   id:"suite", 
-      //   options:
-      //   [
-      //     {value:"Ok", label:"Ok", trigger:"Ok"},
-      //     {value:"Annuler", label:"Annuler", trigger:"Annuler"},
-      //   ]
-      // },
-      // {
-      //   id:"Ok", 
-      //   message:"Merci de votre confiance. Patientez quelques secondes le temps de traiter votre demande.", 
-      //   end:true
-      // },
-      // {
-      //   id:"Annuler", 
-      //   message:"Ravi de vous servir, revenez-nous très prochainement !", 
-      //   end:true
-      // },
-    ]
+    },
+    {
+      id: 'response',
+      message: ({ previousValue }) => handleChatbotResponse(previousValue),
+      trigger: 'userQuery',
+    },
+    {
+      id: 'options',
+      options: [
+        { value: 1, label: 'En savoir plus sur les cours', trigger: 'courseInfo' },
+        { value: 2, label: 'Admissions', trigger: 'admissionInfo' },
+        { value: 3, label: 'Contact', trigger: 'contactInfo' },
+        { value: 4, label: 'Autre question', trigger: 'userQuery' },
+      ],
+    },
+    {
+      id: 'courseInfo',
+      message: 'Nous offrons une variété de cours dans différents domaines. Comment puis-je vous aider spécifiquement ?',
+      trigger: 'options',
+    },
+    {
+      id: 'admissionInfo',
+      message: 'Pour toute information sur les admissions, veuillez visiter notre site web ou contacter notre bureau des admissions.',
+      trigger: 'options',
+    },
+    {
+      id: 'contactInfo',
+      message: 'Vous pouvez nous contacter par email à contact@universite.com ou par téléphone au 123-456-7890.',
+      trigger: 'options',
+    },
+  ];
 
   return (
-    <Segment floated="right">
+    <>
+      <Segment floated="right" > 
       <ThemeProvider theme={theme}>
         <div>
-          <ChatBot 
-            steps={steps} 
-            headerTitle="LUCAS" 
-            
-          />
+            <ChatBot 
+              steps={steps} 
+              headerTitle="Lucas" 
+              botAvatar="../lucas_logo.png"
+              // userAvatar={userAvatar}
+            />
         </div>
       </ThemeProvider>
-    </Segment>
+        
+      </Segment>
+        
+    </>
   );
 }
 

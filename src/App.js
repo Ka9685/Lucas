@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import './App.css';
 import Thebot from './Components/chatBot/Thebot';
+// import Thebot from './Components/Thebot';
 
 
 
